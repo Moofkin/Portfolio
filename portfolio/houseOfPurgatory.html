@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Lauren Cunningham Portfolio</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+ <!--[if lt IE 9]>
+     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link href='http://fonts.googleapis.com/css?family=Kreon:300,400,700' rel='stylesheet' type='text/css'>
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- start plugins -->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script>
+		$(function() {
+			var pull 		= $('#pull');
+				menu 		= $('nav ul');
+				menuHeight	= menu.height();
+			$(pull).on('click', function(e) {
+				e.preventDefault();
+				menu.slideToggle();
+			});
+			$(window).resize(function(){
+        		var w = $(window).width();
+        		if(w > 320 && menu.is(':hidden')) {
+        			menu.removeAttr('style');
+        		}
+    		});
+		});
+	</script>
+<!----font-Awesome----->
+   	<link rel="stylesheet" href="fonts/css/font-awesome.min.css">
+<!----font-Awesome----->
+<!-- start light_box -->
+<link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css" media="screen" />
+<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="js/jquery.fancybox-1.2.1.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("div.fancyDemo a").fancybox();
+		});
+	</script>
+
+</head>
+<body>
+<div class="header_bg" id="home"><!-- start header -->
+<div class="container">
+	<div class="row header text-center specials">
+		<div class="h_logo">
+			<a href="index.html"><img src="images/logo.png" alt="" class="responsive"/></a>
+		</div>
+		<nav class="top-nav">
+			<ul class="top-nav nav_list">
+				<li><a href="resume.html">r e s u m e</a></li>
+            <li><a href="art.html">a r t</a></li>
+				<li class="logo page-scroll"><a title="hexa" href="index.html"><img src="images/logo.png" alt="" class="responsive"/></a></li>
+			   <li><a href="games.html">g a m e s</a></li>
+				<li><a href="programming.html">c o d e</a></li>
+			</ul>
+			<a href="#" id="pull"><img src="images/nav-icon.png" title="menu" /></a>
+		</nav>
+		<div class="clearfix"></div>
+	</div>
+</div>
+</div>
+
+<div class="container"><!-- start main -->
+	<div class="main row">
+ 	 	<h2 class="style">House of Purgatory</h2>
+         <div align = "center">
+            <img src="images/hop1.jpg" style="width:33%; height:33%;"></img>
+            <img src="images/hop5.jpg" style="width:33%; height:33%;"></img>
+            <img src="images/hop2.jpg" style="width:33%; height:33%;"></img>
+         </div>
+      </div>
+      <div style="float:left; margin:0; width:33%; background:#17375E; padding: 20px; color:white;">
+            <div class="col-md-9 about_text" style="width:100%">
+               <div style="float:left; margin:0;">
+                  <h3>Details</h3>
+                     <ul>
+                        <li>Platform(s): <div style="padding-left: 20px">PC</div></li>
+                        <li>Language(s): <div style="padding-left: 20px">GML</div></li>
+                        <li>Engine(s): <div style="padding-left: 20px">GameMaker: Studio</div></li>
+                        <li>IDE used for Development: <div style="padding-left: 20px">None</div></li>
+                        <li>Team or Solo?: <div style="padding-left: 20px">Team</div></li>
+                     </ul>
+               </div>
+            </div>
+      </div>
+      <div style="float:left; margin:0; width:66%; padding: 20px;">
+            <div class="col-md-3 images_1_of_4" style="width:100%">
+               <h3>Description</h3>
+                  House of Purgatory is a 2D bullet hell set in a haunted house.
+                  You play as a ghost that is tied to the house, and is therefore forced to inhabit it for eternity.
+                  This is a story of its attempts to finally rest in peace.
+                  <br>
+               <h3>Responsibilities</h3>
+                  <ul>
+                     <li>Art</li>
+                     <li>Level Design</li>
+                  </ul>
+            </div>
+      </div>
+   </div>
+</div><!-- end main -->
+<br>
+<div class = "container" align="center">
+   <img align="left" src="images/hop4.jpg" style="width:49%; height:49%"></img>
+   <img align="right" src="images/con3.png" style="width:49%; height:49%"></img>
+</div>
+<br>
+<br>
+
+<div class="footer1_bg"><!-- start footer1 -->
+	<div class="container">
+		<div class="row  footer">
+			<div class="copy text-center">
+				<p class="link"><span></span></p>
+				<a href="#home" id="toTop" style="display: block;"><span id="toTopHover" style="opacity: 1;"> </span></a>
+			</div>
+		</div>
+		<script type="text/javascript">
+				$(function() {
+				  $('a[href*=#]:not([href=#])').click(function() {
+				    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+			
+				      var target = $(this.hash);
+				      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+				      if (target.length) {
+				        $('html,body').animate({
+				          scrollTop: target.offset().top
+				        }, 1000);
+				        return false;
+				      }
+				    }
+				  });
+				});
+		</script>
+		<!---- start-smoth-scrolling---->		
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Lauren Cunningham Portfolio</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+ <!--[if lt IE 9]>
+     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link href='http://fonts.googleapis.com/css?family=Kreon:300,400,700' rel='stylesheet' type='text/css'>
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- start plugins -->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script>
+   $(function() {
+      var pull 		= $('#pull');
+         menu 		= $('nav ul');
+         menuHeight	= menu.height();
+      $(pull).on('click', function(e) {
+         e.preventDefault();
+         menu.slideToggle();
+      });
+      $(window).resize(function(){
+         var w = $(window).width();
+         if(w > 320 && menu.is(':hidden')) {
+            menu.removeAttr('style');
+         }
+      });
+   });
+</script>
+<!----font-Awesome----->
+   	<link rel="stylesheet" href="fonts/css/font-awesome.min.css">
+<!----font-Awesome----->
+<!-- start light_box -->
+<link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css" media="screen" />
+<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="js/jquery.fancybox-1.2.1.js"></script>
+<script type="text/javascript">
+   $(document).ready(function() {
+      $("div.fancyDemo a").fancybox();
+   });
+</script>
+<script type="text/javascript">
+   function loadImages(e){
+      //-------loading the slider images...----------
+      var img = new Image();
+      img.src="images/slider1.jpg";
+      img.alt="";
+      img.class="responsive";
+      slider1.appendChild(img);
+      
+      var img = new Image();
+      img.src="images/slider2.jpg";
+      img.alt="";
+      img.class="responsive";
+      slider2.appendChild(img);
+      
+      var img = new Image();
+      img.src="images/slider3.jpg";
+      img.alt="";
+      img.class="responsive";
+      slider3.appendChild(img);
+      
+      var img = new Image();
+      img.src="images/slider4.png";
+      img.alt="";
+      img.class="responsive";
+      slider4.appendChild(img);
+      
+      var img = new Image();
+      img.src="images/slider5.jpg";
+      img.alt="";
+      img.class="responsive";
+      slider5.appendChild(img);
+      //----------------------------------------------
+   }
+</script>
+
+</head>
+<body onload="loadImages()">
+<div class="header_bg" id="home"><!-- start header -->
+<div class="container">
+	<div class="row header text-center specials">
+		<div class="h_logo">
+			<a href="index.html"><img src="images/logo.png" alt="" class="responsive"/></a>
+		</div>
+		<nav class="top-nav">
+			<ul class="top-nav nav_list">
+				<li><a href="resume.html">r e s u m e</a></li>
+            <li><a href="art.html">a r t</a></li>
+				<li class="logo page-scroll"><a title="hexa" href="index.html"><img src="images/logo.png" alt="" class="responsive"/></a></li>
+			   <li><a href="games.html">g a m e s</a></li>
+				<li><a href="programming.html">c o d e</a></li>
+			</ul>
+			<a href="#" id="pull"><img src="images/nav-icon.png" title="menu" /></a>
+		</nav>
+		<div class="clearfix"></div>
+	</div>
+</div>
+</div>
+<div class="slider_bg"><!-- start slider -->
+<div class="container">
+		<div class="row slider">
+		<div class="wmuSlider example1"><!-- start wmuSlider example1 -->
+			   <div class="wmuSliderWrapper">
+				   <article style="position: absolute; width: 100%; opacity: 0;"> 
+				  	 	<div class="slider_img text-center">
+				   			<ul class="list-unstyled list_imgs">
+				   				<li><div id="slider1"/></li>
+				   			</ul>
+			           	</div>
+				   </article>
+				   <article style="position: relative; width: 100%; opacity: 1;"> 
+				  	 	<div class="slider_img text-center">
+				   			<ul class="list-unstyled list_imgs">
+				   				<li><div id="slider2"/></li>
+				   			</ul>
+			           	</div>
+				   </article>
+               <article style="position: absolute; width: 100%; opacity: 0;"> 
+				  	 	<div class="slider_img text-center">
+				   			<ul class="list-unstyled list_imgs">
+				   				<li><div id="slider3"/></li>
+				   			</ul>
+			           	</div>
+				   </article>
+               <article style="position: absolute; width: 100%; opacity: 0;"> 
+				  	 	<div class="slider_img text-center">
+				   			<ul class="list-unstyled list_imgs">
+				   				<li><div id="slider4"/></li>
+				   			</ul>
+			           	</div>
+				   </article>
+               <article style="position: absolute; width: 100%; opacity: 0;"> 
+				  	 	<div class="slider_img text-center">
+				   			<ul class="list-unstyled list_imgs">
+				   				<li><div id="slider5"/></li>
+				   			</ul>
+			           	</div>
+				   </article>
+				 </div>
+                <ul class="wmuSliderPagination">
+                	<li><a href="#" class="">0</a></li>
+                	<li><a href="#" class="">1</a></li>
+                  <li><a href="#" class="">2</a></li>
+                  <li><a href="#" class="">3</a></li>
+                  <li><a href="#" class="">4</a></li>
+                </ul>
+			<script src="js/jquery.wmuSlider.js"></script> 
+		     <script>
+				 $('.example1').wmuSlider();         
+			</script>
+        </div><!-- end wmuSlider example1 -->
+        <div class="clearfix"></div>
+      </div>
+</div>
+<div class="container"><!-- start main -->
+	<div class="main row">
+   <h2 class="style">Sprites & Other 2D Game Art</h2>
+      <h4><i>(A small selection). All were created using Adobe Photoshop.</i></h4>
+	 	 <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d1.png"><img src="images/2d1.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d2.png"><img src="images/2d2.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d3.png"><img src="images/2d3.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d4.png"><img src="images/2d4.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+         <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Player sprite <br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Mineral sprite <br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Energy bar icon <br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Tutorial screen <br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+         <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d5.png"><img src="images/2d5.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d6.png"><img src="images/2d6.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d7.png"><img src="images/2d7.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/2d8.png"><img src="images/2d8.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+         <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Nitrate icon <br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Chair sprite <br>from House of Purgatory</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Background <br>from Snake Reloaded</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Plant sprite <br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+   <h2 class="style">Concepts</h2>
+      <h4><i>(A small selection).</i></h4>
+	 	 <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/con1.png"><img src="images/con1.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/con2.png"><img src="images/con2.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/con3.png"><img src="images/con3.png" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/con4.jpg"><img src="images/con4.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+         <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Map Design<br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>UI Layout<br>from Potential for Life</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Level Design<br>from House of Purgatory</h4>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+                  <h4>Enemy Design<br>from The Silver Dollar</h4>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+   <h2 class="style">3D Models</h2>
+       <h4><i>All all are static models created using Blender.</i></h4>
+	 	 <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img1.jpg"><img src="images/img1.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img2.jpg"><img src="images/img2.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img3.jpg"><img src="images/img3.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img4.jpg"><img src="images/img4.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+	 	 <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img5.jpg"><img src="images/img5.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img6.jpg"><img src="images/img6.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img7.jpg"><img src="images/img7.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/img8.jpg"><img src="images/img8.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+      </div>
+ 	 	<h2 class="style">Studio Art</h2>
+         <h4><i>(A small selection).</i></h4>
+	 	 <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic1.jpg"><img src="images/pic1.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic2.jpg"><img src="images/pic2.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic3.jpg"><img src="images/pic3.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic4.jpg"><img src="images/pic4.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+	 	 <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic5.jpg"><img src="images/pic5.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic6.jpg"><img src="images/pic6.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic7.jpg"><img src="images/pic7.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic8.jpg"><img src="images/pic8.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+         <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic9.jpg"><img src="images/pic9.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic10.jpg"><img src="images/pic10.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic11.jpg"><img src="images/pic11.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic12.jpg"><img src="images/pic12.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+         </div>
+         <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic13.jpg"><img src="images/pic13.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic14.jpg"><img src="images/pic14.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic15.jpg"><img src="images/pic15.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic16.jpg"><img src="images/pic16.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+         <div class="grids_of_4 row">
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic17.jpg"><img src="images/pic17.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic18.jpg"><img src="images/pic18.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic19.jpg"><img src="images/pic19.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="col-md-3 images_1_of_4">
+					<div class="fancyDemo">
+						<a rel="group" title="" href="images/pic20.jpg"><img src="images/pic20.jpg" alt=""class="img-responsive"/></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			</div>
+	</div>
+</div><!-- end main -->
+
+<br><br>
+
+<div class="footer1_bg"><!-- start footer1 -->
+	<div class="container">
+		<div class="row  footer">
+			<div class="copy text-center">
+				<p class="link"><span></span></p>
+				<a href="#home" id="toTop" style="display: block;"><span id="toTopHover" style="opacity: 1;"> </span></a>
+			</div>
+		</div>
+		<script type="text/javascript">
+				$(function() {
+				  $('a[href*=#]:not([href=#])').click(function() {
+				    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+			
+				      var target = $(this.hash);
+				      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+				      if (target.length) {
+				        $('html,body').animate({
+				          scrollTop: target.offset().top
+				        }, 1000);
+				        return false;
+				      }
+				    }
+				  });
+				});
+		</script>
+		<!---- start-smoth-scrolling---->		
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!-- name: Lauren Cunningham and Andrew Parvis
+	cruzid: lccunnin, aparvis
+	date: 6/9/2015
+	description: The Glass Solid Viewer allows the user to view a number of present models with a glass texture.
+					In addition, it allows for camera and model manipulations, toggling between flat and smooth shading, and changing the glass' color.
+					For information on running this application, view the README, or run the "index.html" file located in the report folder. -->
+
+<!-- This file contains the main part of the code for the Glass Solid Viewer -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Glass Solid Viewer</title>
+		<meta charset="utf-8">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- Dependencies -->
+		<script src = "three.js"></script>
+		<script src = "dat.gui.min.js"></script>
+		<script src = "shark.poly.js"></script>
+		<script src = "shark.coor.js"></script>
+		<script src = "enterprise.poly.js"></script>
+		<script src = "enterprise.coor.js"></script>
+		<script src = "icosahedron.poly.js"></script>
+		<script src = "icosahedron.coor.js"></script>
+		<script src = "57chevy.js"></script>
+		<script src = "chair1.js"></script>
+		<script src = "chair2.js"></script>
+		<script src = "guitar.js"></script>
+		<script src = "jadai.js"></script>
+		<script src = "man.js"></script>
+		<script src = "woman.js"></script>
+		<script src = "couch.js"></script>
+		<script src = "kitchen.js"></script>
+		<script src = "stepper.js"></script>
+		<script src = "modelLoader.js"></script>
+		<script src = "OrbitControls.js"></script>
+
+		<!-- standard vertex shader to work with three.js -->
+		<script type="x-shader/x-vertex" id="vertexShader">
+
+			attribute vec3 center;
+			varying vec3 vCenter;
+
+			void main() {
+
+				vCenter = center;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<!-- standard fragment shader to work with three.js -->
+		<script type="x-shader/x-fragment" id="fragmentShader">
+
+			#extension GL_OES_standard_derivatives : enable
+
+			varying vec3 vCenter;
+
+			float edgeFactorTri() {
+
+				vec3 d = fwidth( vCenter.xyz );
+				vec3 a3 = smoothstep( vec3( 0.0 ), d * 1.5, vCenter.xyz );
+				return min( min( a3.x, a3.y ), a3.z );
+
+			}
+
+			void main() {
+
+				gl_FragColor.rgb = mix( vec3( 1.0 ), vec3( 0.2 ), edgeFactorTri() );
+				gl_FragColor.a = 1.0;
+			}
+
+		</script>
+
+		<script>
+			
+			//model and model selection things
+			var models = [[SHARK_POLY, SHARK_COORD], [ENTERPRISE_POLY, ENTERPRISE_COORD], [ICOSAHEDRON_POLY, ICOSAHEDRON_COORD], [chevy_poly, chevy_coor], [guitar_poly, guitar_coor], [jadai_poly, jadai_coor], [man_poly, man_coor], [woman_poly, woman_coor], [chair2_poly, chair2_coor], [couch_poly, couch_coor], [kitchen_poly, kitchen_coor], [stepper_poly, stepper_coor]];
+			var modelID = 0;
+			var modelPoly = models[modelID][0];
+			var modelCoord = models[modelID][1];
+			
+			//used for reflection material
+			var reflectionCube;
+			
+			//used for refraction material
+			var refractionCube;
+			
+			//"composiiton of the scene" things
+			var camera, cameraController, scene, renderer;
+			
+			//default model color
+			var color = 0xFFFFFF;
+			
+			//default shading type (not srystalline)
+			var shade = THREE.SmoothShading;
+			
+			//names of each model in the menu
+			var modelNames = ["Shark", "Enterprise", "Icosahedron", "Chevy", "Guitar", "Jadai", "Man", "Woman", "Chair", "Couch", "Kitchen", "Stepper"];
+			
+			init();
+			renderer.render( scene, camera );
+
+			function init() {
+
+				//creates a scene
+				scene = new THREE.Scene();
+				
+				//creates the camera
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 4000 );
+				camera.position.set( 0, 0, 100);
+				camera.lookAt(scene.position);
+
+				// attaches the vertex and fragment shaders to the scene 
+				var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+				var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+
+				//creates a white overhead point light (to simulate the sun)
+				var light = new THREE.PointLight(0xFFFFFF);
+				light.position.set(0, 600, 0);
+				scene.add(light);
+				
+				//creates a light grey anbient light (to simulate light bouncing of the scene)
+				var aLight = new THREE.AmbientLight(0x333333);
+				scene.add(aLight);
+				
+				//definition and creation of the skybox's texture
+				var textures = ["posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg"];
+				var materialArray = [];
+				for (var i = 0; i < 6; i++)
+					materialArray.push( new THREE.MeshBasicMaterial({
+						map: THREE.ImageUtils.loadTexture(textures[i]),
+						side: THREE.BackSide
+					}));
+				var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+				
+				//creation of the reflection cube used to map colors to the model from reflection
+				reflectionCube = THREE.ImageUtils.loadTextureCube( textures, THREE.CubeReflectionMapping);
+				reflectionCube.format = THREE.RGBFormat;
+				
+				//creation of the refraction cube used to map colors to the model from refraction
+				refractionCube = THREE.ImageUtils.loadTextureCube( textures, THREE.CubeRefractionMapping);
+				refractionCube.format = THREE.RGBFormat;
+				
+				//creates the box part of the skybox, adds the texture, then adds it to the scene
+				var skyBoxGeometry = new THREE.BoxGeometry(2000, 2000, 2000, 1, 1, 1);
+				var skyBoxMaterial = new THREE.MeshBasicMaterial( {color: 0x9999ff, side: THREE.BackSide, depthWrite: false, depthTest: false} );
+				var skyBox = new THREE.Mesh( skyBoxGeometry, skyMaterial );
+				scene.add(skyBox);
+				scene.fog = new THREE.FogExp2( 0x9999ff, 0.00025 );
+
+				//creation of the model, computation of its normals, and creation of the three materials (the model, reflection, and refraction materials)
+				model = new Model(modelPoly, modelCoord);
+				model.geometry.computeFaceNormals();
+				model.geometry.computeVertexNormals();
+				var material = new THREE.MeshPhongMaterial({color: color, envMap: refractionCube, refractionRatio: 1.52, combine: THREE.MixOperation, shading: shade, transparent: true, opacity: 0.6, depthTest: false, depthWrite:false});
+				var material2 = new THREE.MeshPhongMaterial({color: color, envMap: reflectionCube, combine: THREE.MixOperation, shading: shade, reflectivity: 1.0, transparent: true, opacity: 0.2, depthTest: false, depthWrite:false});
+				var material3 = new THREE.MeshPhongMaterial({color: color, combine: THREE.MixOperation, shading: shade, transparent: true, opacity: 0.2, depthTest: false, depthWrite:false}); 
+
+				//console.log(model.geometry.vertices, model.geometry.faces);
+				
+				//creation of the glass material by mixing the three other materials, adds the glass model to the scene
+				meshMixed = THREE.SceneUtils.createMultiMaterialObject(model.geometry, [material, material2, material3]);
+				scene.add( meshMixed );
+				
+				//console.log(meshMixed);
+
+				//renderer
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+				
+				//creation of the camera controller (which allows for panning, zooming, and rotation of the camera)
+				cameraController = new THREE.OrbitControls(camera, renderer.domElement);
+				cameraController.maxDistance = 1500;
+				cameraController.addEventListener('change', render);
+
+				//resizes the contents of the Glass Solid Viewer if the window is resized
+				window.addEventListener( 'resize', onWindowResize, false );
+				
+				//-------------------------------MENU THINGS---------------------------------------------
+				
+				//creation of the menu
+				gui = new dat.GUI();
+				
+				//holds the parameters of the menu in any state
+				parameters = 
+				{
+					x: 0, y: 0, z: 0,
+					rotX: 0, rotY: 0, rotZ: 0,
+					scX:1, scY: 1, scZ: 1,
+					color:  "#ffffff", // color (change "#" to "0x")
+					crystalline: false,
+					model: "Shark",
+					reset: function() { this.x = 0; this.y = 0; this.z = 0; this.rotX = 0; this.rotY = 0; this.rotZ = 0; this.scX = 1; this.scY = 1; this.scZ = 1; this.color = "#ffffff"; this.crystalline = false; this.model = modelNames[modelID]; modelReset();   }
+				};
+			
+				//creates menu position folder
+				var folder1 = gui.addFolder('Position');
+				var posX = folder1.add( parameters, 'x' ).min(-200).max(200).step(1).listen();
+				var posY = folder1.add( parameters, 'y' ).min(-200).max(200).step(1).listen();
+				var posZ = folder1.add( parameters, 'z' ).min(-200).max(200).step(1).listen();
+				folder1.open();
+				
+				//creates menu rotation folder
+				folder2 = gui.addFolder('Rotation');
+				var rotationX = folder2.add(parameters, 'rotX').min(-360).max(360).step(1).listen();
+				var rotationY = folder2.add(parameters, 'rotY').min(-360).max(360).step(1).listen();
+				var rotationZ = folder2.add(parameters, 'rotZ').min(-360).max(360).step(1).listen();
+				folder2.open();
+				
+				//creates menu scaling folder
+				folder3 = gui.addFolder('Scale');
+				var scaleX = folder3.add(parameters, 'scX').min(0.01).max(5).step(1).listen();
+				var scaleY = folder3.add(parameters, 'scY').min(0.01).max(5).step(1).listen();
+				var scaleZ = folder3.add(parameters, 'scZ').min(0.01).max(5).step(1).listen();
+				folder3.open();
+				var modelColor = gui.addColor( parameters, 'color' ).name('Color').listen();
+				
+				//creates crystalline toggle box
+				var crystal = gui.add(parameters, 'crystalline').name('Crystalline').listen();
+				
+				//creates model pull-down menu
+				var loadedModel = gui.add(parameters, 'model', modelNames).name('Model').listen();
+				
+				//creates the reset parameters button
+				gui.add( parameters, 'reset' ).name("Reset Parameters");
+				
+				//end menu declarations
+				
+				//begin menu operations
+				
+				//changes the position of the model, re-renders
+				posX.onChange(function(value) {   meshMixed.position.x = value; parameters.x = value; render();   });
+				posY.onChange(function(value) {   meshMixed.position.y = value; parameters.y = value; render();   });
+				posZ.onChange(function(value) {   meshMixed.position.z = value; parameters.z = value; render();   });
+				
+				//changes the rotation of the model, re-renders
+				rotationX.onChange(function(value) {   meshMixed.rotation.x = value*((Math.PI)/180); parameters.rotX = value; render();   });
+				rotationY.onChange(function(value) {   meshMixed.rotation.y = value*((Math.PI)/180); parameters.rotY = value; render();   });
+				rotationZ.onChange(function(value) {   meshMixed.rotation.z = value*((Math.PI)/180); parameters.rotZ = value; render();   });
+				
+				//changes the scaling of the model, re-renders
+				scaleX.onChange(function(value) {   meshMixed.scale.x = value; parameters.scX = value; render();   });
+				scaleY.onChange(function(value) {   meshMixed.scale.y = value; parameters.scY = value; render();   });
+				scaleZ.onChange(function(value) {   meshMixed.scale.z = value; parameters.scZ = value; render();   });
+							
+				//changes the color of the model, re-renders
+				modelColor.onChange(function(value) {   color = value; var clr = new THREE.Color(color); meshMixed.children[2].material.color = clr; render();   });
+				
+				//changes the shading of the model, re-renders
+				crystal.onChange(function(value) {   if(value){shade = THREE.FlatShading; changeShade(1);}else{shade = THREE.SmoothShading; changeShade(2);}   });
+				
+				//calls function that resets the parameters of the menu
+				loadedModel.onChange(function(value){   changeModel(value); parameters.reset();    });
+				
+				gui.open();
+				//-------------------------END MENU THINGS----------------------------------------------
+
+			}
+
+			//resizes the contents of the Glass Solid Viewer if the window is resized
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+			
+			//renders the scene
+			function render() {
+				renderer.render( scene, camera );
+			}
+			
+			//swaps out models
+			function changeModel(i){
+				if(typeof(i) == typeof("")){
+					modelID = modelNames.indexOf(i);
+				}
+				else{
+					modelID += i;
+					if(modelID < 0){
+						modelID = models.length-1;
+					}
+					else if(modelID == models.length){
+						modelID = 0;
+					}
+				}
+				
+				//removes old model
+				modelPoly = models[modelID][0];
+				modelCoord = models[modelID][1];
+				scene.remove(meshMixed);
+				
+				//new model
+				model = new Model(modelPoly, modelCoord);
+				model.geometry.computeFaceNormals();
+				model.geometry.computeVertexNormals();
+				
+				//new materials
+				var material = new THREE.MeshPhongMaterial({color: color, envMap: refractionCube, refractionRatio: 1.52, combine: THREE.MixOperation, shading: shade, transparent: true, opacity: 0.6, depthTest: true, depthWrite:true});
+				var material2 = new THREE.MeshPhongMaterial({color: color, envMap: reflectionCube, combine: THREE.MixOperation, shading: shade, reflectivity: 1.0, transparent: true, opacity: 0.2, depthTest: true, depthWrite:true});
+				var material3 = new THREE.MeshPhongMaterial({color: color, combine: THREE.MixOperation, shading: shade, transparent: true, opacity: 0.2, depthTest: true, depthWrite:true}); 
+			
+				//adds it to the scene
+				meshMixed = THREE.SceneUtils.createMultiMaterialObject(model.geometry, [material, material2, material3]);
+				scene.add( meshMixed );
+				render();
+			}
+			
+			//recalculates the glass material
+			function changeShade(){
+				meshMixed.children[0].material = (new THREE.MeshPhongMaterial({color: color, envMap: refractionCube, refractionRatio: 1.52, combine: THREE.MixOperation, shading: shade, transparent: true, opacity: 0.6, depthTest: true, depthWrite:true}));
+				meshMixed.children[1].material = (new THREE.MeshPhongMaterial({color: color, envMap: reflectionCube, combine: THREE.MixOperation, shading: shade, reflectivity: 1.0, transparent: true, opacity: 0.2, depthTest: true, depthWrite:true}));
+				meshMixed.children[2].material = (new THREE.MeshPhongMaterial({color: color, combine: THREE.MixOperation, shading: shade, transparent: true, opacity: 0.2, depthTest: true, depthWrite:true}));
+				render();
+			}
+			
+			//resets the menu parameters (and therfore resets the model currently on the screen)
+			function modelReset(){
+				meshMixed.scale.x = 1;
+				meshMixed.scale.y = 1;
+				meshMixed.scale.z = 1;
+				meshMixed.position.x = 0;
+				meshMixed.position.y = 0;
+				meshMixed.position.z = 0;
+				meshMixed.rotation.x = 0;
+				meshMixed.rotation.y = 0;
+				meshMixed.rotation.z = 0;
+				color = "0xffffff";
+				shade = THREE.SmoothShading;
+				changeShade();
+				render();
+			}
+
+		</script>
+	</body>
+</html>

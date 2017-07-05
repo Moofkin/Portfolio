@@ -1,0 +1,160 @@
+<!-- name: Lauren Cunningham and Andrew Parvis
+	cruzid: lccunnin, aparvis
+	date: 6/9/2015
+	description: The Glass Solid Viewer allows the user to view a number of present models with a glass texture.
+					In addition, it allows for camera and model manipulations, toggling between flat and smooth shading, and changing the glass' color.
+					For information on running this application, view the README, or run the "index.html" file located in the report folder. -->
+
+<!-- This is the report file for the Glass Solid Viewer -->
+
+<!DOCTYPE html>
+
+<style>
+	body{
+		background: #1a1a1a
+	}
+	
+	div.content {
+    	background-color: #acacac;
+    	padding-left: 50px;
+    	padding-right: 50px;
+    }
+    
+    #names{
+    	color: #ffffff;
+    }
+
+</style>
+
+<div align="right" id = "names">
+  Lauren Cunningham.............<br>
+  Andrew Parvis......................
+</div> 
+
+<br><br>
+
+<div align = "center" class = "content">
+	
+	<br><br><h1>Glass Solid Viewer</h1>
+	
+	<p>We created an application that accurately depicts a glass material on a number of different models.<br> This includes correct diffuse/specular lighting for 
+		transparent materials, as well as the reflection and refraction that are indicative of glass.
+	</p>
+	<p><br><i>*This application uses the three.js library created by Ricardo Cabello.*<br>
+		*Visit his website at <a href="http://threejs.org/">threejs.org/</a>.* 
+	</i></p>
+	
+	<p><br><h2>Details: Components of the Glass Solid Viewer</h2>
+		<h3>Geometries</h3>
+			Each object is made of a number of vertices connected into polygons. <br>
+			These are the models we use in this application.<br>
+			__________________________________________________
+		<h3>The Model Loader</h3>
+			In order to get each model into the viewer, we created a model loader.<br>
+			In implementation, this is a model class that takes in a poly and coord file and converts them to a three.js geometry.<br>
+			(The coord file contains a list of all of the vertices in a model, and the poly file specifies how the vertices are connected together).<br>
+			Once the geometry has been loaded, the loader dynamically finds the center of the model by finding the largest and smallest x, y, and z value.<br>
+			It takes the difference of the x's, y's and z's and translates this point to the origin of the scene.<br>
+			Similarly, it dynamically scales objects into the scene by finding the largest of the all of the vertices' components.<br>
+			It then takes this value and finds out how much this component must be scaled to reach a desired size (in our case 30 in any direction), then scales all other components by this value as well.<br>
+			__________________________________________________
+		<h3>Lighting</h3>
+			In order to see a model, there needs to be some source of light.<br>
+			We used three.js to define a both an overhead point light and an ambient light for our scene.<br>
+			The point light was defined with a white color, and was intended to simulate the light of the sun. <br>
+			Because point lights only shine from a certain direction, this is the light that makes your eventual specular lighting.<br>
+			The ambient light was defined as a light grey color (so it didn't overwhelm the point light), and was intended to simulate light bouncing off of the scene itself.<br>
+			__________________________________________________
+		<h3>Skybox</h3>
+			The skybox is used to create the backgound for the scene.<br>
+			In order to make one, we created a cube geometry and texture-mapped a skybox texture to the inside faces of it.<br>
+			This creates a seamless panorma-like background.<br>
+			__________________________________________________
+		<h3>The Glass Material (the Exciting Bit)</h3>
+			The material is what covers each geometry and makes it look like it's made of glass.<br>
+			In order to create an accurate glass material, three things need to be working in unison: the model material, the reflection, and the refraction.<br>
+			We created three different materials for each model in order to capture all three of these things.
+			<h4>Model Material</h4>
+				The model material is where diffuse and specular lighting are handled, as well as glass color and transparency.<br>
+				For this, we used a semi-transparent phong material from the three.js library.<br>
+				This calculated the color that the model should display per pixel, while taking into account material color, lighting color (for diffuse and specular shading), and camera position (for specular shading).<br>
+				One problem we ran into was that the built-in depth buffer for three.js was deleting the back faces for this material (which we needed because the material was transparent).<br>
+				This was fixed by turning this feature off. <br>
+				<i>Just the model material.</i><br>
+				<img src="modelMaterial.png" height = "80%" width = "80%" border = "5px">
+			<h4>Reflection Material</h4> 
+				In order to implement reflection, we used another three.js phong material, and then used three.js' built-in reflection cube functionality.<br>
+				This allowed us to use our skybox's texture to calculate reflection vectors for each pixel of the model, and the color that each pixel picks up from the environment from reflection.<br>
+				<i>Just the reflection material.</i><br>
+				<img src="reflectionMaterial.png" height = "80%" width = "80%" border = "5px">
+			<h4>Refraction Material</h4>
+				Similar to the method used for reflection, we used the refraction cube functionality to map the environment to our model.<br>
+				This allowed us to calculate the refraction vectors for each pixel of the model, and the color that each pixel gets from the environment as a result of refraction.<br>
+				<i>Just the refraction material.</i><br>
+				<img src="refractionMaterial.png" height = "80%" width = "80%" border = "5px"><br>
+			Finally, we combined all three materials to get the glass material.<br>
+			To do this, the colors for all three materials were blended together using three.js' meshMixed functionality.<br>
+			<i>The final result.</i><br>
+			<img src="combinedMaterial.png" height = "80%" width = "80%" border = "5px"><br>
+			__________________________________________________
+		<h3>Camera</h3>
+			Our camera was an orthographic camera created using three.js functionality and controlled using the three.js plugin, OrbitControls.<br>
+			This allowed our camera to zoom in or out with the mouse wheel by changing its position along the vector drawn from its viweing angle. <br>
+			It also allowed us to pan in all directions using a right-click and drag by moving the camera along the opposite vector from the mouse drag.<br>
+			Finally, it allowed for rotation using a left-click and drag by rotating around the center of the scene.<br>
+			__________________________________________________
+		<h3>Menu</h3>
+			Finally we decided to create a menu for our application that allowed for alterations to the models themselves. <br>
+			To do this, we used the framework from dat.gui, and allowed users the ability to translate, rotate and scale models, as well as change material color, change whether models were crystalline or not, and change the model.
+			<h4>Functionality</h4>
+				The position sliders change the model's position in the scene.<br>
+				This was achieved by applying a translation matrix to the model's geometry based on the sliders' states.<br>
+				The rotation sliders define a rotation matrix that is used to rotate the model in the scene. <br>
+				The scaling sliders' values are used to create a scaling matrix that is used to alter the model's geometry.<br>
+				Changing the color in the menu alters the color of the model material (not the reflection/refraction material) that is used create the glass material.<br>	
+				The crystalline checkbox toggles between smooth and flat shading (flat shading gives the models pretty facets).<br>
+				<i>Difference between crystalline and not.</i><br>
+				<img src="img5.png" border = "5px"><br>
+				The model pull-down allows the user to change models by swapping out the geometry of a previous model with a new one.<br>
+				It also resets the previous values in the menu before doing so.<br>
+				The reset button simply returns the menu to its default position, rotation, scaling, color, and shading.<br>
+			__________________________________________________<br><br>
+		Those were the all of the components of the Glass Solid Viewer, and a brief description of their implementations.					
+	</p>
+
+	<p><br><h2>User Guide</h2>
+		<h3>User Features:</h3>
+			View glass solids on a fully-rendered display.<br>
+			Toggle through different preset glass models.<br>
+			Interact with the application to rotate, scale and translate the models.<br>
+			Full 360 degrees of camera rotation.<br>
+			Camera zoom and panning.<br>
+			Change the color of each glass model.<br>
+			Display each model as smooth or crystalline.<br>
+			__________________________________________________<br>
+		<u>How to Run:</u><br><br>
+			Please Note: This application works in Firefox Only!<br>
+			<a href="../code/index.html">Click Here.</a> <br>
+			__________________________________________________<br>
+		<u>Camera Controls</u>
+			<p>Left-click and drag to rotate the camera around the scene.<br>
+			Middle-mouse scroll to zoom the camera.<br>
+			Right-click and drag to pan the camera.<br>
+			__________________________________________________<br><br>
+		<img src="img6.png"><br>
+			__________________________________________________
+	
+	<br><br><h2>Sample Output</h2>
+		<p><img src="img1.png" height = "80%" width = "80%" border = "5px"><br><br>
+		<img src="img2.png" height = "80%" width = "80%" border = "5px"><br><br>
+		<img src="img3.png" border = "5px"><br><br>
+		<img src="img4.png" border = "5px"><br><br></p>
+
+	<p><br><b>References:</b><br>
+		Properties of Glass (the optical properties are the important bit): <a href="http://www.saint-gobain-sekurit.com/glazingcatalouge/glass-properties#a3">http://www.saint-gobain-sekurit.com/glazingcatalouge/glass-properties#a3</a><br>
+		Calculating Glass Properties: <a href="http://en.wikipedia.org/wiki/Calculation_of_glass_properties">http://en.wikipedia.org/wiki/Calculation_of_glass_properties</a><br>
+		Tutorial on the Using the Depth Buffer and Transparency: <a href="http://learningwebgl.com/blog/?p=859">http://learningwebgl.com/blog/?p=859</a><br>
+	</p><br><br>
+</div>
+
+<br><br><br><br>
